@@ -1,4 +1,3 @@
-
 import React from 'react';
 import CustomNavbar from '@/components/CustomNavbar';
 import Footer from '@/components/Footer';
@@ -10,7 +9,17 @@ import { FileText, BarChart3, CarFront } from 'lucide-react';
 const TrafficSimulatorPage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#f8f9fa] relative">
-      {/* Animated background elements */}
+      {/* Hero Background Image */}
+      <div className="absolute inset-0 w-full h-[500px] overflow-hidden -z-10">
+        <img 
+          src="https://images.unsplash.com/photo-1494522358652-f30e61a60313?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+          alt="Traffic intersection with cars" 
+          className="w-full h-full object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/30 via-background to-background"></div>
+      </div>
+      
+      {/* Animated background elements - keeping them for additional effect */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-b from-blue-100/30 to-transparent rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDuration: '8s' }} />
         <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-gradient-to-t from-cyan-100/20 to-transparent rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDuration: '10s' }} />

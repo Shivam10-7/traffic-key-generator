@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent } from '@/components/ui/card';
-import { Trash, Upload } from 'lucide-react';
+import { Trash, Upload, RefreshCw } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/use-toast';
 
 const TrafficSimulator = () => {
   const [images, setImages] = useState<string[]>([]);
@@ -15,8 +16,9 @@ const TrafficSimulator = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
-  const [apiUrl, setApiUrl] = useState<string>('https://e75e-34-106-114-213.ngrok-free.app/upload');
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
+  const { toast } = useToast();
+  const apiUrl = 'https://e75e-34-106-114-213.ngrok-free.app/upload';
 
   // Handle image selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +30,11 @@ const TrafficSimulator = () => {
 
     if (selectedFiles.length !== 4) {
       setError('Please select exactly 4 images.');
+      toast({
+        variant: "destructive",
+        title: "Invalid selection",
+        description: "Please select exactly 4 images."
+      });
       setImageFiles([]);
       setImages([]);
       return;
@@ -47,17 +54,17 @@ const TrafficSimulator = () => {
     };
   }, [images]);
 
-  // Handle API URL change
-  const handleApiUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setApiUrl(e.target.value);
-  };
-
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (imageFiles.length !== 4) {
       setError('Please select exactly 4 images.');
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please select exactly 4 images."
+      });
       return;
     }
 
@@ -93,12 +100,21 @@ const TrafficSimulator = () => {
         setGreenTimes(response.data.green_light_times);
         setVehicleData(response.data.vehicle_data);
         setSuccess(true);
+        toast({
+          title: "Success",
+          description: "Traffic signal timings calculated successfully."
+        });
       } else {
         throw new Error('Invalid response format from server');
       }
     } catch (err: any) {
       console.error('Error processing images:', err);
       setError(`Error: ${err.message}`);
+      toast({
+        variant: "destructive",
+        title: "Processing Error",
+        description: err.message
+      });
     } finally {
       setIsLoading(false);
     }
@@ -146,84 +162,91 @@ const TrafficSimulator = () => {
     setVehicleData([]);
     setError(null);
     setSuccess(false);
+    toast({
+      title: "Reset",
+      description: "All data has been cleared."
+    });
   };
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="mb-6">
-        <label htmlFor="apiUrl" className="block mb-2 font-medium">
-          Server URL:
-        </label>
-        <Input 
-          id="apiUrl" 
-          value={apiUrl} 
-          onChange={handleApiUrlChange} 
-          placeholder="Enter your ngrok URL here"
-          className="w-full"
-        />
-        <p className="mt-1 text-sm text-muted-foreground">
-          Enter the URL provided by ngrok when you start your Flask server
-        </p>
-      </div>
-
       {/* Image Upload Form */}
-      <form onSubmit={handleSubmit}>
-        <div className="p-6 mb-6 border-2 border-dashed rounded-lg bg-background/50">
-          <h3 className="mb-3 text-lg font-medium">Upload Traffic Images</h3>
-          <p className="mb-4 text-muted-foreground">
-            Select 4 images of traffic at different intersection approaches
-          </p>
-
+      <Card className="mb-8 border-0 shadow-sm overflow-hidden">
+        <CardContent className="p-6">
           <div className="mb-6">
-            <Input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleImageChange}
-              className="mb-4"
-            />
+            <h3 className="text-xl font-semibold mb-2">Upload Intersection Images</h3>
+            <p className="text-muted-foreground">
+              Select 4 images of traffic at different intersection approaches for AI analysis
+            </p>
           </div>
 
-          {/* Image Previews with Canvas */}
-          {images.length > 0 && (
-            <div className="grid grid-cols-2 gap-4 mb-6 md:grid-cols-4">
-              {images.map((src, index) => (
-                <div key={index} className="relative">
-                  <div className="absolute top-2 left-2 px-2 py-1 text-xs font-medium bg-black/70 text-white rounded-full">
-                    Lane {index + 1}
-                  </div>
-                  <div className="overflow-hidden border rounded-lg">
-                    <canvas 
-                      ref={el => canvasRefs.current[index] = el}
-                      className="w-full h-auto"
-                    />
-                  </div>
-                </div>
-              ))}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="p-6 border-2 border-dashed rounded-lg bg-gray-50/50 flex flex-col items-center justify-center">
+              <div className="mb-6 text-center">
+                <Input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="mb-2 bg-white"
+                />
+                <p className="text-sm text-muted-foreground">
+                  Upload 4 different intersection approach images
+                </p>
+              </div>
             </div>
-          )}
 
-          <div className="flex gap-3">
-            <Button 
-              type="submit" 
-              disabled={isLoading || imageFiles.length !== 4}
-              className="flex-1"
-            >
-              <Upload className="w-4 h-4 mr-2" />
-              {isLoading ? 'Processing...' : 'Calculate Signal Timings'}
-            </Button>
+            {/* Image Previews with Canvas */}
+            {images.length > 0 && (
+              <div className="grid grid-cols-2 gap-4 mb-6 md:grid-cols-4">
+                {images.map((src, index) => (
+                  <div key={index} className="relative">
+                    <div className="absolute top-2 left-2 px-2 py-1 text-xs font-medium bg-blue-500 text-white rounded-md shadow-sm z-10">
+                      Lane {index + 1}
+                    </div>
+                    <div className="overflow-hidden border rounded-lg shadow-sm bg-white">
+                      <canvas 
+                        ref={el => canvasRefs.current[index] = el}
+                        className="w-full h-auto"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
-            <Button 
-              type="button" 
-              onClick={handleReset}
-              variant="destructive"
-            >
-              <Trash className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
-          </div>
-        </div>
-      </form>
+            <div className="flex gap-3">
+              <Button 
+                type="submit" 
+                disabled={isLoading || imageFiles.length !== 4}
+                className="flex-1 bg-blue-500 hover:bg-blue-600"
+              >
+                {isLoading ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4 mr-2" />
+                    Calculate Signal Timings
+                  </>
+                )}
+              </Button>
+
+              <Button 
+                type="button" 
+                onClick={handleReset}
+                variant="outline"
+                className="bg-white"
+              >
+                <Trash className="w-4 h-4 mr-2" />
+                Reset
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       {/* Error Message */}
       {error && (
@@ -235,51 +258,53 @@ const TrafficSimulator = () => {
 
       {/* Success Message */}
       {success && (
-        <Alert className="mb-6 border-green-200 text-green-800 bg-green-50 dark:bg-green-900/20 dark:text-green-300 dark:border-green-900/30">
+        <Alert className="mb-6 border-green-200 text-green-800 bg-green-50">
           <AlertTitle>Success!</AlertTitle>
           <AlertDescription>Traffic signal timings calculated.</AlertDescription>
         </Alert>
       )}
 
       {/* Traffic Signal Display */}
-      <Card className="mt-8">
-        <CardContent className="pt-6">
-          <h2 className="mb-6 text-2xl font-bold text-center">
-            Traffic Signal Timings
-          </h2>
+      {success && (
+        <Card className="mb-8 border-0 shadow-sm overflow-hidden">
+          <CardContent className="pt-6">
+            <h2 className="mb-6 text-2xl font-bold text-center">
+              AI-Optimized Traffic Signal Timings
+            </h2>
 
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {greenTimes.map((time, index) => (
-              <div key={index} className="p-4 bg-white border rounded-lg shadow-sm dark:bg-gray-800">
-                <div className="mb-2 text-lg font-medium text-center">
-                  Lane {index + 1}
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {greenTimes.map((time, index) => (
+                <div key={index} className="p-4 bg-white border rounded-lg shadow-sm">
+                  <div className="mb-2 text-lg font-medium text-center">
+                    Lane {index + 1}
+                  </div>
+
+                  {/* Traffic Light */}
+                  <div className={`
+                    w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center text-white font-bold text-xl
+                    ${time > 0 ? 'bg-green-500' : 'bg-red-500'} 
+                    border-4 border-gray-700 shadow-md
+                  `}>
+                    {time}s
+                  </div>
+
+                  <div className="flex justify-between p-2 text-sm bg-gray-100 rounded">
+                    <span>Vehicles:</span>
+                    <span className="font-bold">{vehicleData[index]?.count || 0}</span>
+                  </div>
                 </div>
+              ))}
+            </div>
 
-                {/* Traffic Light */}
-                <div className={`
-                  w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center text-white font-bold text-xl
-                  ${time > 0 ? 'bg-green-500' : 'bg-red-500'} 
-                  border-4 border-gray-700 shadow-md
-                `}>
-                  {time}s
-                </div>
-
-                <div className="flex justify-between p-2 text-sm bg-gray-100 rounded dark:bg-gray-700">
-                  <span>Vehicles:</span>
-                  <span className="font-bold">{vehicleData[index]?.count || 0}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 text-sm text-center text-muted-foreground">
-            <p>
-              Green light timings are calculated based on detected vehicles.
-              Each vehicle adds 5 seconds to the base time (minimum 15s, maximum 60s).
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+            <div className="mt-6 text-sm text-center text-muted-foreground">
+              <p>
+                Green light timings are calculated based on detected vehicles.
+                Each vehicle adds 5 seconds to the base time (minimum 15s, maximum 60s).
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

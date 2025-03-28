@@ -6,8 +6,9 @@ import GreenLightCalculator from '@/components/GreenLightCalculator';
 import LoginForm from '@/components/LoginForm';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { FileText, BarChart, LogOut } from 'lucide-react';
+import { FileText, BarChart3, LogOut, CarFront, TrafficCone } from 'lucide-react';
 import { useUser } from '@/context/UserContext';
+import { Card } from '@/components/ui/card';
 
 const GreenLightPage = () => {
   const { user, logout, isAdmin } = useUser();
@@ -18,16 +19,22 @@ const GreenLightPage = () => {
       <main className="flex-grow pt-24 pb-20">
         <div className="container px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center mb-14">
-            <h1 className="text-4xl font-bold mb-4 text-gray-800">Smart Green Light Calculator</h1>
+            <div className="inline-block p-2 bg-green-50 rounded-lg mb-6">
+              <TrafficCone className="h-12 w-12 text-green-500" />
+            </div>
+            <h1 className="text-4xl font-bold mb-4 text-gray-800">Smart Green Light Optimizer</h1>
             <p className="text-xl text-muted-foreground mx-auto max-w-2xl mb-8">
-              Calculate optimal green light timings based on detected vehicles at intersections.
+              Advanced AI-powered system that optimizes traffic flow by calculating precise green light timings based on real-time vehicle detection.
             </p>
             
             {user && (
               <>
-                <div className="flex justify-center items-center mb-6">
-                  <div className="bg-white rounded-lg shadow-sm p-4 flex items-center gap-3">
-                    <div>
+                <Card className="mb-6 p-4 bg-white border-0 shadow-sm">
+                  <div className="flex justify-center items-center gap-3">
+                    <div className="bg-blue-50 p-3 rounded-full">
+                      <CarFront className="h-5 w-5 text-blue-500" />
+                    </div>
+                    <div className="text-left">
                       <p className="font-medium">{user.name}</p>
                       <p className="text-sm text-muted-foreground">{user.email}</p>
                     </div>
@@ -40,36 +47,38 @@ const GreenLightPage = () => {
                       variant="outline" 
                       size="sm" 
                       onClick={logout}
-                      className="ml-2"
+                      className="ml-2 bg-white"
                     >
                       <LogOut className="h-4 w-4 mr-2" />
                       Logout
                     </Button>
                   </div>
-                </div>
+                </Card>
                 
                 {isAdmin && (
-                  <p className="text-sm bg-blue-50 text-blue-800 p-2 rounded mb-6">
-                    As an administrator, you have full access to modify traffic data.
-                  </p>
+                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-6 flex items-center justify-center text-blue-800">
+                    <div className="font-medium">Administrator Access</div>
+                    <div className="text-sm ml-2">You have full access to modify traffic data</div>
+                  </div>
                 )}
                 
                 {!isAdmin && (
-                  <p className="text-sm bg-gray-50 text-gray-800 p-2 rounded mb-6">
-                    As a viewer, you can view traffic data but cannot modify it.
-                  </p>
+                  <div className="bg-gray-50 border border-gray-100 rounded-lg p-3 mb-6 flex items-center justify-center text-gray-700">
+                    <div className="font-medium">Viewer Access</div>
+                    <div className="text-sm ml-2">You can view but not modify traffic data</div>
+                  </div>
                 )}
               </>
             )}
             
             <div className="flex justify-center gap-4">
-              <Button asChild variant="outline" className="bg-white hover:bg-gray-50">
+              <Button asChild variant="outline" className="bg-white hover:bg-gray-50 shadow-sm">
                 <Link to="/simulator">
-                  <BarChart className="mr-2 h-4 w-4" />
-                  View Full Traffic Simulator
+                  <BarChart3 className="mr-2 h-4 w-4" />
+                  Traffic Simulator
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="bg-white hover:bg-gray-50">
+              <Button asChild variant="outline" className="bg-white hover:bg-gray-50 shadow-sm">
                 <Link to="/docs">
                   <FileText className="mr-2 h-4 w-4" />
                   API Documentation
@@ -80,7 +89,9 @@ const GreenLightPage = () => {
           
           {!user ? (
             <div className="max-w-md mx-auto">
-              <LoginForm />
+              <Card className="p-6 border-0 shadow-sm">
+                <LoginForm />
+              </Card>
             </div>
           ) : (
             <GreenLightCalculator isAdmin={isAdmin} />

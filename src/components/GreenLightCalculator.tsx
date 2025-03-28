@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Input } from '@/components/ui/input';
@@ -19,9 +20,9 @@ const GreenLightCalculator = ({ isAdmin }: GreenLightCalculatorProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
-  const [apiUrl, setApiUrl] = useState<string>('https://e75e-34-106-114-213.ngrok-free.app/upload');
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const { toast } = useToast();
+  const apiUrl = 'https://e75e-34-106-114-213.ngrok-free.app/upload';
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -53,10 +54,6 @@ const GreenLightCalculator = ({ isAdmin }: GreenLightCalculatorProps) => {
       images.forEach(imageUrl => URL.revokeObjectURL(imageUrl));
     };
   }, [images]);
-
-  const handleApiUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setApiUrl(e.target.value);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -175,115 +172,102 @@ const GreenLightCalculator = ({ isAdmin }: GreenLightCalculatorProps) => {
     setVehicleData([]);
     setError(null);
     setSuccess(false);
+    toast({
+      title: "Reset",
+      description: "All data has been cleared."
+    });
   };
 
   return (
     <div className="max-w-4xl mx-auto">
-      <Card className="p-6 border border-gray-100 bg-white shadow-sm mb-8">
-        <div className="mb-6">
-          <label htmlFor="apiUrl" className="block mb-2 font-medium text-gray-700">
-            Server URL
-          </label>
-          <Input 
-            id="apiUrl" 
-            value={apiUrl} 
-            onChange={handleApiUrlChange} 
-            placeholder="Enter your ngrok URL here"
-            className="w-full bg-gray-50 border-gray-200"
-            disabled={!isAdmin}
-          />
-          <p className="mt-1 text-sm text-muted-foreground">
-            {isAdmin 
-              ? "Enter the URL provided by ngrok when you start your Flask server" 
-              : "Only administrators can change the server URL"}
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <div className={`p-6 mb-6 border-2 border-dashed rounded-lg border-gray-200 bg-gray-50/50 ${!isAdmin ? 'opacity-75' : ''}`}>
-            <div className="flex justify-between items-center mb-3">
-              <h3 className="text-lg font-medium text-gray-800">Upload Intersection Images</h3>
-              {!isAdmin && (
-                <div className="flex items-center text-sm text-amber-600 bg-amber-50 px-2 py-1 rounded">
-                  <Lock className="h-3 w-3 mr-1" />
-                  View only
-                </div>
-              )}
-            </div>
-            
-            <p className="mb-4 text-muted-foreground">
-              {isAdmin 
-                ? "Select 4 images of traffic at different intersection approaches" 
-                : "Only administrators can upload and process new images"}
-            </p>
-
-            <div className="mb-6">
-              <Input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleImageChange}
-                className="mb-4 bg-white border-gray-200"
-                disabled={!isAdmin}
-              />
-            </div>
-
-            {images.length > 0 && (
-              <div className="grid grid-cols-2 gap-4 mb-6 md:grid-cols-4">
-                {images.map((src, index) => (
-                  <div key={index} className="relative">
-                    <div className="absolute top-2 left-2 px-2 py-1 text-xs font-medium bg-white/90 text-gray-700 rounded-full shadow-sm">
-                      Lane {index + 1}
-                    </div>
-                    <div className="overflow-hidden border rounded-lg border-gray-200 bg-white shadow-sm">
-                      <canvas 
-                        ref={el => canvasRefs.current[index] = el}
-                        className="w-full h-auto"
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="flex gap-3">
-              <Button 
-                type="submit" 
-                disabled={isLoading || imageFiles.length !== 4 || !isAdmin}
-                className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
-              >
-                {isLoading ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Calculate Green Light Timings
-                  </>
-                )}
-              </Button>
-
-              <Button 
-                type="button" 
-                onClick={handleReset}
-                variant="outline"
-                className="bg-white border-gray-200 hover:bg-gray-50 text-gray-700"
-                disabled={!isAdmin}
-              >
-                <Trash className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-            </div>
-
+      <Card className="border-0 shadow-sm overflow-hidden mb-8">
+        <CardContent className="p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-semibold">Intersection Analysis</h3>
             {!isAdmin && (
-              <div className="mt-4 text-sm text-center text-muted-foreground">
-                Please contact an administrator if you need to upload new traffic data.
+              <div className="flex items-center text-sm text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
+                <Lock className="h-3 w-3 mr-1" />
+                View only
               </div>
             )}
           </div>
-        </form>
+          
+          <form onSubmit={handleSubmit}>
+            <div className={`p-6 mb-6 border-2 border-dashed rounded-lg border-gray-200 bg-gray-50/50 ${!isAdmin ? 'opacity-90' : ''}`}>
+              <p className="mb-4 text-muted-foreground">
+                {isAdmin 
+                  ? "Select 4 images of traffic at different intersection approaches for AI analysis" 
+                  : "Only administrators can upload and process new images"}
+              </p>
+
+              <div className="mb-6">
+                <Input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="mb-4 bg-white border-gray-200"
+                  disabled={!isAdmin}
+                />
+              </div>
+
+              {images.length > 0 && (
+                <div className="grid grid-cols-2 gap-4 mb-6 md:grid-cols-4">
+                  {images.map((src, index) => (
+                    <div key={index} className="relative">
+                      <div className="absolute top-2 left-2 px-2 py-1 text-xs font-medium bg-green-500 text-white rounded-md shadow-sm z-10">
+                        Lane {index + 1}
+                      </div>
+                      <div className="overflow-hidden border rounded-lg shadow-sm bg-white">
+                        <canvas 
+                          ref={el => canvasRefs.current[index] = el}
+                          className="w-full h-auto"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <Button 
+                  type="submit" 
+                  disabled={isLoading || imageFiles.length !== 4 || !isAdmin}
+                  className="flex-1 bg-green-500 hover:bg-green-600 text-white"
+                >
+                  {isLoading ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-4 h-4 mr-2" />
+                      Calculate Green Light Timings
+                    </>
+                  )}
+                </Button>
+
+                <Button 
+                  type="button" 
+                  onClick={handleReset}
+                  variant="outline"
+                  className="bg-white border-gray-200 hover:bg-gray-50 text-gray-700"
+                  disabled={!isAdmin}
+                >
+                  <Trash className="w-4 h-4 mr-2" />
+                  Reset
+                </Button>
+              </div>
+
+              {!isAdmin && (
+                <div className="mt-4 text-sm text-center text-muted-foreground">
+                  Please contact an administrator if you need to upload new traffic data.
+                </div>
+              )}
+            </div>
+          </form>
+        </CardContent>
       </Card>
 
       {error && (
@@ -301,10 +285,10 @@ const GreenLightCalculator = ({ isAdmin }: GreenLightCalculatorProps) => {
       )}
 
       {success && (
-        <Card className="mt-8 border border-gray-100 bg-white shadow-sm overflow-hidden">
+        <Card className="mt-8 border-0 shadow-sm overflow-hidden">
           <CardContent className="pt-6">
             <h2 className="mb-6 text-2xl font-bold text-center text-gray-800">
-              Optimal Green Light Timings
+              AI-Optimized Green Light Timings
             </h2>
 
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">

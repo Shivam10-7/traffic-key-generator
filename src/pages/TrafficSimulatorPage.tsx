@@ -14,9 +14,9 @@ const TrafficSimulatorPage = () => {
         <img 
           src="https://images.unsplash.com/photo-1494522358652-f30e61a60313?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
           alt="Traffic intersection with cars" 
-          className="w-full h-full object-cover opacity-20"
+          className="w-full h-full object-cover opacity-70"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/30 via-background to-background"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/30 via-background/70 to-background"></div>
       </div>
       
       {/* Animated background elements - keeping them for additional effect */}

@@ -18,7 +18,7 @@ const TrafficSimulator = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const { toast } = useToast();
-  const apiUrl = 'https://e75e-34-106-114-213.ngrok-free.app/upload';
+  const apiUrl = 'https://e005-34-21-30-65.ngrok-free.app/upload';
 
   // Handle image selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

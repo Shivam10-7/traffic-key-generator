@@ -9,7 +9,6 @@ import Index from "./pages/Index";
 import DocsPage from "./pages/DocsPage";
 import GeneratorPage from "./pages/GeneratorPage";
 import TrafficSimulatorPage from "./pages/TrafficSimulatorPage";
-import GreenLightPage from "./pages/GreenLightPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,7 +25,6 @@ const App = () => (
             <Route path="/docs" element={<DocsPage />} />
             <Route path="/generator" element={<GeneratorPage />} />
             <Route path="/simulator" element={<TrafficSimulatorPage />} />
-            <Route path="/green-light" element={<GreenLightPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

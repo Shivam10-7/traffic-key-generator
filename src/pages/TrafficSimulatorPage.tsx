@@ -45,7 +45,7 @@ const TrafficSimulatorPage = () => {
               <Button 
                 asChild 
                 variant="outline" 
-                className="bg-white hover:bg-gray-50 shadow-sm transition-all duration-300 hover:scale-105"
+                className="bg-white hover:bg-blue-500 hover:text-white shadow-sm transition-all duration-300 hover:scale-105 border-2 border-blue-500"
               >
                 <Link to="/docs">
                   <FileText className="mr-2 h-4 w-4" />

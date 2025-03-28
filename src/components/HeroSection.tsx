@@ -15,7 +15,7 @@ const HeroSection = () => {
           loop
           muted
           playsInline
-          className="absolute w-full h-full object-cover opacity-30 dark:opacity-20"
+          className="absolute w-full h-full object-cover opacity-100 dark:opacity-15"
           poster="https://images.unsplash.com/photo-1494522358652-f30e61a60313?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
         >
           <source src="https://assets.mixkit.co/videos/preview/mixkit-highway-traffic-at-night-time-lapse-10652-large.mp4" type="video/mp4" />
@@ -67,13 +67,13 @@ const HeroSection = () => {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mb-16 animate-fade-up [animation-delay:600ms]">
-            <Button asChild size="lg" className="h-12 px-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105">
+            <Button asChild size="lg" className="h-12 px-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 border-2 border-blue-400">
               <Link to="/generator">
                 Get API access
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="h-12 px-6 backdrop-blur border-blue-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300 hover:scale-105">
+            <Button asChild variant="outline" size="lg" className="h-12 px-6 backdrop-blur border-2 border-blue-200 hover:border-blue-300 hover:bg-blue-500 hover:text-white transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30">
               <Link to="/simulator">
                 Try the simulator
               </Link>

@@ -14,12 +14,12 @@ const GeneratorPage = () => {
       <main className="flex-grow pt-24 pb-20">
         <div className="container px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">API Key Generator</h1>
+            <h1 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">API Key Generator</h1>
             <p className="text-xl text-muted-foreground mx-auto max-w-2xl mb-8">
               Generate API keys to authenticate your requests to the Traffic Manager API.
             </p>
             <div className="flex justify-center gap-4">
-              <Button asChild variant="outline">
+              <Button asChild className="h-12 px-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 border-2 border-blue-400">
                 <Link to="/docs">
                   <FileText className="mr-2 h-4 w-4" />
                   View Documentation

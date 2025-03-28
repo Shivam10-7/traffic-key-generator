@@ -64,7 +64,7 @@ const ApiGenerator = () => {
         <div className="inline-flex items-center justify-center p-2 mb-4 rounded-full bg-accent/10 text-accent">
           <KeyRound className="w-6 h-6" />
         </div>
-        <h2 className="text-3xl font-bold mb-3">Generate Your API Keys</h2>
+        <h2 className="text-3xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">Generate Your API Keys</h2>
         <p className="text-muted-foreground max-w-lg mx-auto">
           Use these API keys to authenticate your requests to the Traffic Manager API. Keep your secret key confidential!
         </p>

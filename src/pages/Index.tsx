@@ -16,7 +16,7 @@ const Index = () => {
         <section className="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-gray-900 relative">
           <div className="container px-4 sm:px-6 relative">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
                 Ready to get started?
               </h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

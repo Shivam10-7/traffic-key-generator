@@ -1,11 +1,38 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Globe, LineChart, Shield, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const HeroSection = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-in');
+            entry.target.classList.remove('opacity-0');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (contentRef.current) {
+      const elements = contentRef.current.querySelectorAll('.fade-on-scroll');
+      elements.forEach((el) => {
+        el.classList.add('opacity-0'); // Start invisible
+        observer.observe(el);
+      });
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="relative overflow-hidden pt-28 pb-20">
       {/* Video background */}
@@ -16,18 +43,19 @@ const HeroSection = () => {
           muted
           playsInline
           className="absolute w-full h-full object-cover opacity-100 dark:opacity-15"
+          // Fallback image with 100% opacity when video hasn't loaded yet
           poster="https://images.unsplash.com/photo-1494522358652-f30e61a60313?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
         >
           <source src="https://assets.mixkit.co/videos/preview/mixkit-highway-traffic-at-night-time-lapse-10652-large.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-transparent z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-transparent z-10"></div>
       </div>
       
       {/* Animated traffic grid overlay */}
       <div 
         className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBzdHJva2U9IiMyMDJCNDAiIHN0cm9rZS13aWR0aD0iMS41IiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIG9wYWNpdHk9Ii4xIj48cGF0aCBkPSJNMzAgNjBWME0wIDMwaDYwIi8+PC9nPjwvc3ZnPg==')] z-10"
-        style={{ opacity: 0.15 }}
+        style={{ opacity: 0.1 }}
         aria-hidden="true"
       />
 
@@ -36,37 +64,72 @@ const HeroSection = () => {
         {Array.from({ length: 18 }).map((_, i) => (
           <div 
             key={i}
-            className="absolute w-2 h-2 bg-blue-400 rounded-full opacity-70 animate-pulse"
+            className="absolute w-2 h-2 bg-blue-400 rounded-full opacity-70"
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${3 + Math.random() * 7}s`
+              animation: `
+                pulse 2s infinite,
+                float ${5 + Math.random() * 5}s infinite linear,
+                moveHorizontal ${8 + Math.random() * 7}s infinite alternate ease-in-out,
+                moveVertical ${6 + Math.random() * 5}s infinite alternate ease-in-out
+              `,
+              animationDelay: `${Math.random() * 5}s`
             }}
           />
         ))}
+        <style>{`
+          @keyframes float {
+            0% { transform: translateY(0); }
+            25% { transform: translateY(-10px); }
+            50% { transform: translateY(-20px); }
+            75% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+          }
+          @keyframes moveHorizontal {
+            0% { transform: translateX(-50px); }
+            25% { transform: translateX(-25px); }
+            50% { transform: translateX(0px); }
+            75% { transform: translateX(25px); }
+            100% { transform: translateX(50px); }
+          }
+          @keyframes moveVertical {
+            0% { transform: translateY(-30px); }
+            25% { transform: translateY(-15px); }
+            50% { transform: translateY(0px); }
+            75% { transform: translateY(15px); }
+            100% { transform: translateY(30px); }
+          }
+          @keyframes pulse {
+            0% { opacity: 0.4; }
+            25% { opacity: 0.6; }
+            50% { opacity: 0.8; }
+            75% { opacity: 0.6; }
+            100% { opacity: 0.4; }
+          }
+        `}</style>
       </div>
 
       <div className="container px-4 sm:px-6 relative z-20">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center px-3 py-1.5 mb-6 text-sm font-medium rounded-full bg-accent/10 text-accent animate-pulse">
+        <div ref={contentRef} className="max-w-5xl mx-auto text-center">
+          <div className="fade-on-scroll inline-flex items-center justify-center px-3 py-1.5 mb-6 text-sm font-medium rounded-full bg-accent/10 text-accent animate-pulse">
             <span className="flex items-center">
               <Zap className="w-3.5 h-3.5 mr-1.5 animate-pulse" />
               Smart traffic management
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 animate-fade-up text-balance">
+          <h1 className="fade-on-scroll text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-balance">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">
               Autonomous AI Traffic Management
             </span>
           </h1>
 
-          <p className="text-xl text-muted-foreground mx-auto max-w-2xl mb-8 animate-fade-up [animation-delay:400ms] text-balance">
+          <p className="fade-on-scroll text-xl text-gray-500 mx-auto max-w-2xl mb-8 text-balance">
             Our intelligent system analyzes traffic flow in real-time, optimizing signal timings and reducing congestion through advanced computer vision.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4 mb-16 animate-fade-up [animation-delay:600ms]">
+          <div className="fade-on-scroll flex flex-wrap justify-center gap-4 mb-16">
             <Button asChild size="lg" className="h-12 px-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 border-2 border-blue-400">
               <Link to="/generator">
                 Get API access
@@ -82,7 +145,7 @@ const HeroSection = () => {
         </div>
 
         {/* Animated traffic metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto animate-fade-up [animation-delay:800ms]">
+        <div className="fade-on-scroll grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
           <StatsCard 
             icon={<Globe className="w-5 h-5 text-blue-500" />}
             value="99.99%"

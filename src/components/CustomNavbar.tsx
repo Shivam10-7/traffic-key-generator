@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { CarFront, Activity } from 'lucide-react';
+import { CarFront, Activity, Airplay, File, KeyRound } from 'lucide-react';
 
 const CustomNavbar = () => {
   const location = useLocation();
@@ -25,7 +25,10 @@ const CustomNavbar = () => {
             asChild
             className={`transition-all duration-300 hover:scale-105 ${location.pathname === "/" ? "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700" : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"}`}
           >
-            <Link to="/">Home</Link>
+                    <Link to="/">
+          <Airplay className="mr-1 h-4 w-4" />
+          Home
+        </Link>
           </Button>
           <Button 
             variant={location.pathname === "/simulator" ? "default" : "ghost"}
@@ -34,17 +37,21 @@ const CustomNavbar = () => {
             className={`transition-all duration-300 hover:scale-105 ${location.pathname === "/simulator" ? "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700" : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"}`}
           >
             <Link to="/simulator">
-              <Activity className="mr-1 h-4 w-4" />
+<Activity className="mr-1 h-4 w-4" /> {/* className defined here: margin-right: 0.25rem (mr-1), height: 1rem (h-4), width: 1rem (w-4) */}
               Simulator
             </Link>
           </Button>
+          {/* Wave icon imported from lucide-react as Activity */}
           <Button 
             variant={location.pathname === "/docs" ? "default" : "ghost"}
             size="sm" 
             asChild
             className={`transition-all duration-300 hover:scale-105 ${location.pathname === "/docs" ? "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700" : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"}`}
           >
-            <Link to="/docs">API Docs</Link>
+           
+            <Link to="/docs"> <File className="mr-1 h-4 w-4" />API Docs
+            </Link>
+            
           </Button>
           <Button 
             variant={location.pathname === "/generator" ? "default" : "ghost"}
@@ -52,7 +59,8 @@ const CustomNavbar = () => {
             asChild
             className={`transition-all duration-300 hover:scale-105 ${location.pathname === "/generator" ? "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700" : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"}`}
           >
-            <Link to="/generator">API Keys</Link>
+            <Link to="/generator"><KeyRound className='mr-1 h-4 h-4' />API Keys</Link>
+            
           </Button>
         </nav>
       </div>

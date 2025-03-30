@@ -1,0 +1,8 @@
+html, body {
+  cursor: none;
+}
+
+/* Optional: Add this if you want the cursor to be visible only on certain elements */
+.gradient-text:hover ~ .cursor {
+  transform: scale(1.5);
+}

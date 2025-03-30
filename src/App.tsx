@@ -10,28 +10,32 @@ import DocsPage from "./pages/DocsPage";
 import GeneratorPage from "./pages/GeneratorPage";
 import TrafficSimulatorPage from "./pages/TrafficSimulatorPage";
 import NotFound from "./pages/NotFound";
+import AnimatedCursor from '@/components/AnimatedCursor';
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <UserProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/docs" element={<DocsPage />} />
-            <Route path="/generator" element={<GeneratorPage />} />
-            <Route path="/simulator" element={<TrafficSimulatorPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </UserProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <UserProvider>
+          <Toaster />
+          <Sonner />
+          <AnimatedCursor />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/docs" element={<DocsPage />} />
+              <Route path="/generator" element={<GeneratorPage />} />
+              <Route path="/simulator" element={<TrafficSimulatorPage />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </UserProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

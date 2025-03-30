@@ -21,7 +21,7 @@ const TrafficSimulator = () => {
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const apiUrl = 'https://0b43-34-21-30-65.ngrok-free.app/upload';
+  const apiUrl = 'https://6683-34-45-39-6.ngrok-free.app/upload';
 
   // Handle image selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -362,11 +362,7 @@ const TrafficSimulator = () => {
                   <div className="relative mx-auto mb-6 w-24 h-64 bg-gray-800 rounded-lg p-2 flex flex-col items-center justify-between">
                     {/* Red light */}
                     <div className={`w-16 h-16 rounded-full ${time === 0 ? 'bg-red-500 shadow-lg shadow-red-500/50' : 'bg-red-900/30'} border-4 border-gray-700`}></div>
-                    
-                    {/* Yellow light */}
                     <div className="w-16 h-16 rounded-full bg-yellow-900/30 border-4 border-gray-700"></div>
-                    
-                    {/* Green light */}
                     <div className={`w-16 h-16 rounded-full ${time > 0 ? 'bg-green-500 shadow-lg shadow-green-500/50' : 'bg-green-900/30'} border-4 border-gray-700 flex items-center justify-center text-white font-bold text-xl`}>
                       {time > 0 && `${time}s`}
                     </div>
